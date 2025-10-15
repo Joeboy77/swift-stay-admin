@@ -118,6 +118,20 @@ class ApiService {
     return this.request('/admin/dashboard', { method: 'GET' });
   }
 
+  // Owner Applications
+  async getOwnerApplications(page: number = 1, limit: number = 20, status?: string) {
+    const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+    if (status) params.append('status', status);
+    return this.request(`/owner-applications?${params.toString()}`, { method: 'GET' });
+  }
+
+  async updateOwnerApplicationStatus(id: string, status: 'approved' | 'rejected' | 'reviewing' | 'pending') {
+    return this.request(`/owner-applications/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  }
+
   async getAllRoomTypes() {
     return this.request('/admin/room-types', { method: 'GET' });
   }

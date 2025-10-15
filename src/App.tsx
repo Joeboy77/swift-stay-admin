@@ -11,6 +11,7 @@ import NotificationsPage from './pages/NotificationsPage';
 import SettingsPage from './pages/SettingsPage';
 import BookingsPage from './pages/BookingsPage';
 import TransfersPage from './pages/TransfersPage';
+import PartnerApplicationsPage from './pages/PartnerApplicationsPage';
 
 
 const App: React.FC = () => {
@@ -73,6 +74,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <TransfersPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/partner-applications" 
+          element={
+            <ProtectedRoute>
+              <PartnerApplicationsPage />
             </ProtectedRoute>
           } 
         />
