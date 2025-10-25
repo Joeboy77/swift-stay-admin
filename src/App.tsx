@@ -12,6 +12,7 @@ import SettingsPage from './pages/SettingsPage';
 import BookingsPage from './pages/BookingsPage';
 import TransfersPage from './pages/TransfersPage';
 import PartnerApplicationsPage from './pages/PartnerApplicationsPage';
+import CommissionSettingsPage from './pages/CommissionSettingsPage';
 
 
 const App: React.FC = () => {
@@ -82,6 +83,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <PartnerApplicationsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/commission-settings" 
+          element={
+            <ProtectedRoute>
+              <CommissionSettingsPage />
             </ProtectedRoute>
           } 
         />

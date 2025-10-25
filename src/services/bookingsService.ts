@@ -8,6 +8,11 @@ export interface Booking {
   checkInDate: string;
   checkOutDate?: string | null;
   totalAmount: string;
+  baseAmount?: number;
+  commissionAmount?: number;
+  paymentType?: 'full' | 'partial';
+  amountPaid?: number;
+  amountRemaining?: number;
   currency: string;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   paymentReference?: string;
@@ -41,6 +46,8 @@ export interface BookingStats {
   pendingBookings: number;
   cancelledBookings: number;
   totalRevenue: string;
+  totalBaseAmount: string;
+  totalCommissionAmount: string;
 }
 
 export interface BookingFilters {

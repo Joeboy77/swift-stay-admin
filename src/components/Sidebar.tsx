@@ -10,7 +10,8 @@ import {
   LogOut,
   Calendar,
   Send,
-  Handshake
+  Handshake,
+  DollarSign
 } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -38,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
     { icon: Handshake, label: 'Partner Applications', href: '/partner-applications', active: location.pathname === '/partner-applications' },
     { icon: Calendar, label: 'Bookings', href: '/bookings', active: location.pathname === '/bookings' },
     { icon: Send, label: 'Transfers', href: '/transfers', active: location.pathname === '/transfers' },
+    { icon: DollarSign, label: 'Commission Settings', href: '/commission-settings', active: location.pathname === '/commission-settings' },
     { icon: Bell, label: 'Notifications', href: '/notifications', active: location.pathname === '/notifications' },
     { icon: Settings, label: 'Settings', href: '/settings', active: location.pathname === '/settings' },
   ];

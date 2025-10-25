@@ -64,6 +64,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
   const [, setFetchingRegionalSections] = useState(false);
   const [properties, setProperties] = useState<any[]>([]);
   const [fetchingProperties, setFetchingProperties] = useState(false);
+  const [commissionPercentage, setCommissionPercentage] = useState<number>(5);
   
   // State for dynamic lists
   const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
@@ -115,6 +116,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
   useEffect(() => {
     if (isOpen && type === 'room-type') {
       fetchProperties();
+      fetchCommissionSettings();
     }
   }, [isOpen, type]);
 
@@ -210,6 +212,25 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
     }
   };
 
+  const fetchCommissionSettings = async () => {
+    try {
+      const response = await apiService.getCommissionSettings();
+      if (response.success && response.data) {
+        const data = response.data as any;
+        setCommissionPercentage(data.commission_percentage || 5);
+      }
+    } catch (error) {
+      console.error('Error fetching commission settings:', error);
+      // Keep default 5% if fetch fails
+    }
+  };
+
+  const handleClose = () => {
+    // Reset commission percentage to default when closing
+    setCommissionPercentage(5);
+    onClose();
+  };
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -284,7 +305,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
       setImageUrlsList([]);
       setNewAmenity('');
       setNewImageUrl('');
-      onClose();
+      handleClose();
     } catch (error: any) {
       console.error('Error submitting form:', error);
       
@@ -964,6 +985,9 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
           {errors.price && (
             <p className="mt-1 text-sm text-destructive">{errors.price}</p>
           )}
+          <p className="mt-1 text-sm text-muted-foreground">
+            Base room price before commission
+          </p>
         </div>
 
         <div>
@@ -994,6 +1018,39 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
           </p>
         </div>
       </div>
+
+      {/* Commission Breakdown */}
+      {formData.price && parseFloat(formData.price) > 0 && (
+        <div className="bg-muted/30 border border-border rounded-lg p-4">
+          <h4 className="text-sm font-medium text-foreground mb-3">Commission Breakdown</h4>
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div>
+              <label className="block text-muted-foreground">Base Price</label>
+              <p className="font-medium text-foreground">₵{parseFloat(formData.price || '0').toFixed(2)}</p>
+            </div>
+            <div>
+              <label className="block text-muted-foreground">Commission ({commissionPercentage}%)</label>
+              <p className="font-medium text-green-600">₵{(parseFloat(formData.price || '0') * (commissionPercentage / 100)).toFixed(2)}</p>
+            </div>
+            <div>
+              <label className="block text-muted-foreground">Total User Pays</label>
+              <p className="font-medium text-primary">₵{(parseFloat(formData.price || '0') * (1 + commissionPercentage / 100)).toFixed(2)}</p>
+            </div>
+          </div>
+          <div className="mt-3 pt-3 border-t border-border">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <label className="block text-muted-foreground">40% Payment (Now)</label>
+                <p className="font-medium text-orange-600">₵{((parseFloat(formData.price || '0') * (1 + commissionPercentage / 100)) * 0.4).toFixed(2)}</p>
+              </div>
+              <div>
+                <label className="block text-muted-foreground">60% Payment (On Arrival)</label>
+                <p className="font-medium text-orange-600">₵{((parseFloat(formData.price || '0') * (1 + commissionPercentage / 100)) * 0.6).toFixed(2)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-foreground mb-2">
@@ -1254,7 +1311,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
       />
       
       {/* Modal */}
@@ -1271,7 +1328,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 hover:bg-muted rounded-lg transition-colors"
           >
             <X className="w-5 h-5 text-muted-foreground" />
@@ -1298,7 +1355,7 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onClose, type, onSu
             <div className="flex items-center justify-end space-x-3 pt-6 border-t border-border">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="px-4 py-2 text-sm font-medium text-muted-foreground bg-muted rounded-lg hover:bg-muted/80 transition-colors"
                 disabled={loading}
               >

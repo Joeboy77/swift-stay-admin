@@ -103,8 +103,8 @@ const BookingsPage: React.FC = () => {
     });
   };
 
-  const formatCurrency = (amount: string, currency: string) => {
-    return `${currency}${parseFloat(amount).toFixed(2)}`;
+  const formatCurrency = (amount: string | number, currency: string) => {
+    return `${currency}${parseFloat(amount.toString()).toFixed(2)}`;
   };
 
   return (
@@ -127,73 +127,110 @@ const BookingsPage: React.FC = () => {
         <main className="p-3 sm:p-4 lg:p-6">
           {/* Stats Cards */}
           {stats && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-              <div className="bg-card border border-border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
-                    <p className="text-2xl font-bold text-foreground">{stats.totalBookings}</p>
+            <div className="space-y-6 mb-6">
+              {/* Booking Status Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Total Bookings</p>
+                      <p className="text-2xl font-bold text-foreground">{stats.totalBookings}</p>
+                    </div>
+                    <div className="h-8 w-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="h-8 w-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Confirmed</p>
+                      <p className="text-2xl font-bold text-green-600">{stats.confirmedBookings}</p>
+                    </div>
+                    <div className="h-8 w-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Pending</p>
+                      <p className="text-2xl font-bold text-yellow-600">{stats.pendingBookings}</p>
+                    </div>
+                    <div className="h-8 w-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Cancelled</p>
+                      <p className="text-2xl font-bold text-red-600">{stats.cancelledBookings}</p>
+                    </div>
+                    <div className="h-8 w-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-card border border-border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Confirmed</p>
-                    <p className="text-2xl font-bold text-green-600">{stats.confirmedBookings}</p>
-                  </div>
-                  <div className="h-8 w-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-card border border-border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                    <p className="text-2xl font-bold text-yellow-600">{stats.pendingBookings}</p>
-                  </div>
-                  <div className="h-8 w-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+              {/* Revenue & Commission Breakdown Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                      <p className="text-2xl font-bold text-green-600">₵{parseFloat(stats.totalRevenue).toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Including commission</p>
+                    </div>
+                    <div className="h-8 w-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-card border border-border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Cancelled</p>
-                    <p className="text-2xl font-bold text-red-600">{stats.cancelledBookings}</p>
-                  </div>
-                  <div className="h-8 w-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Base Amount</p>
+                      <p className="text-2xl font-bold text-blue-600">₵{parseFloat(stats.totalBaseAmount).toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Without commission</p>
+                    </div>
+                    <div className="h-8 w-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-card border border-border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
-                    <p className="text-2xl font-bold text-green-600">₵{parseFloat(stats.totalRevenue).toFixed(2)}</p>
-                  </div>
-                  <div className="h-8 w-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                    <svg className="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
+                <div className="bg-card border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Commission Earned</p>
+                      <p className="text-2xl font-bold text-purple-600">₵{parseFloat(stats.totalCommissionAmount).toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Platform revenue</p>
+                    </div>
+                    <div className="h-8 w-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                      <svg className="h-4 w-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -265,7 +302,10 @@ const BookingsPage: React.FC = () => {
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Property</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Room Type</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Check-in</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Amount</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Amount</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Base Amount</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Commission</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Payment Type</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
                   </tr>
@@ -273,13 +313,13 @@ const BookingsPage: React.FC = () => {
                 <tbody className="divide-y divide-border">
                   {loading ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
+                      <td colSpan={11} className="px-4 py-8 text-center text-muted-foreground">
                         Loading bookings...
                       </td>
                     </tr>
                   ) : bookings.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
+                      <td colSpan={11} className="px-4 py-8 text-center text-muted-foreground">
                         No bookings found
                       </td>
                     </tr>
@@ -307,8 +347,23 @@ const BookingsPage: React.FC = () => {
                         <td className="px-4 py-3 text-sm text-foreground">
                           {formatDate(booking.checkInDate)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-foreground">
+                        <td className="px-4 py-3 text-sm text-foreground font-medium">
                           {formatCurrency(booking.totalAmount, booking.currency)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-foreground">
+                          {formatCurrency(booking.baseAmount || 0, booking.currency)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-foreground text-green-600 font-medium">
+                          {formatCurrency(booking.commissionAmount || 0, booking.currency)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-foreground">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            booking.paymentType === 'partial' 
+                              ? 'bg-orange-100 text-orange-800' 
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {booking.paymentType === 'partial' ? '40% Paid' : 'Full Payment'}
+                          </span>
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(booking.status)}`}>
@@ -431,10 +486,46 @@ const BookingsPage: React.FC = () => {
                     <p className="text-sm text-foreground">{formatDate(selectedBooking.checkInDate)}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-muted-foreground">Total Amount</label>
-                    <p className="text-sm text-foreground">{formatCurrency(selectedBooking.totalAmount, selectedBooking.currency)}</p>
+                    <label className="block text-sm font-medium text-muted-foreground">Payment Type</label>
+                    <p className="text-sm text-foreground">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        selectedBooking.paymentType === 'partial' 
+                          ? 'bg-orange-100 text-orange-800' 
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {selectedBooking.paymentType === 'partial' ? '40% Paid' : 'Full Payment'}
+                      </span>
+                    </p>
                   </div>
                 </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground">Base Amount</label>
+                    <p className="text-sm text-foreground">{formatCurrency(selectedBooking.baseAmount || 0, selectedBooking.currency)}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground">Commission</label>
+                    <p className="text-sm text-foreground text-green-600 font-medium">{formatCurrency(selectedBooking.commissionAmount || 0, selectedBooking.currency)}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-muted-foreground">Total Amount</label>
+                    <p className="text-sm text-foreground font-medium">{formatCurrency(selectedBooking.totalAmount, selectedBooking.currency)}</p>
+                  </div>
+                </div>
+
+                {selectedBooking.paymentType === 'partial' && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground">Amount Paid</label>
+                      <p className="text-sm text-foreground">{formatCurrency(selectedBooking.amountPaid || 0, selectedBooking.currency)}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-muted-foreground">Amount Remaining</label>
+                      <p className="text-sm text-foreground text-orange-600 font-medium">{formatCurrency(selectedBooking.amountRemaining || 0, selectedBooking.currency)}</p>
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>

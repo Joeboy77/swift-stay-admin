@@ -26,7 +26,6 @@ const PartnerApplicationsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('pending');
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
   const limit = 20;
 
   const fetchData = async () => {
@@ -37,7 +36,6 @@ const PartnerApplicationsPage: React.FC = () => {
       if (res.success && res.data) {
         const data = res.data as any;
         setItems(data.items || []);
-        setTotal(data.total || 0);
       } else {
         setError(res.message || 'Failed to fetch applications');
       }

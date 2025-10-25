@@ -351,6 +351,25 @@ class ApiService {
       body: JSON.stringify(data)
     });
   }
+
+  // Commission Settings Methods
+  async getCommissionSettings() {
+    return this.request('/commission/settings', { method: 'GET' });
+  }
+
+  async updateCommissionSettings(data: { commission_percentage: number }) {
+    return this.request('/commission/settings', { 
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async calculateCommission(data: { baseAmount: number }) {
+    return this.request('/commission/calculate', { 
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
 }
 
 export const apiService = new ApiService();
