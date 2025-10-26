@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, Search, Eye, Trash2, RefreshCw,
   ChevronLeft, ChevronRight, AlertCircle, LogIn,
-  UserCheck, Activity, Mail, Phone, MapPin, UserX
+  UserCheck, Activity, Mail, Phone, MapPin, UserX, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -58,6 +58,8 @@ const UsersPage: React.FC = () => {
   // Modal states
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string>('');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string>('');
 
   useEffect(() => {
     fetchUsers();
@@ -129,19 +131,23 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-      return;
-    }
+  const handleDeleteUser = (userId: string) => {
+    setUserToDelete(userId);
+    setDeleteModalOpen(true);
+  };
 
+  const confirmDeleteUser = async () => {
     try {
-      const response = await apiService.deleteUser(userId);
+      const response = await apiService.deleteUser(userToDelete);
       if (response.success) {
-        setUsers(prev => prev.filter(user => user.id !== userId));
+        setUsers(prev => prev.filter(user => user.id !== userToDelete));
         fetchUserStats();
+        setDeleteModalOpen(false);
+        setUserToDelete('');
       }
     } catch (err: any) {
       console.error('Error deleting user:', err);
+      alert('Failed to delete user. Please try again.');
     }
   };
 
@@ -484,6 +490,62 @@ const UsersPage: React.FC = () => {
         type="user"
         itemId={selectedUserId}
       />
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4">
+          <div className="bg-card border border-border rounded-lg w-full max-w-sm sm:max-w-md">
+            <div className="p-6 border-b border-border">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-foreground">Delete User</h2>
+                <button
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setUserToDelete('');
+                  }}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center">
+                  <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground">Delete User</h3>
+                  <p className="text-sm text-muted-foreground">This action cannot be undone.</p>
+                </div>
+              </div>
+              <p className="text-foreground mb-6 text-sm sm:text-base">
+                Are you sure you want to delete this user? This action will permanently remove the user from the system and cannot be undone.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+                <button
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setUserToDelete('');
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm sm:text-base"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDeleteUser}
+                  className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
