@@ -13,6 +13,7 @@ import BookingsPage from './pages/BookingsPage';
 import TransfersPage from './pages/TransfersPage';
 import PartnerApplicationsPage from './pages/PartnerApplicationsPage';
 import CommissionSettingsPage from './pages/CommissionSettingsPage';
+import ReportsPage from './pages/ReportsPage';
 
 
 const App: React.FC = () => {
@@ -91,6 +92,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <CommissionSettingsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/reports" 
+          element={
+            <ProtectedRoute>
+              <ReportsPage />
             </ProtectedRoute>
           } 
         />

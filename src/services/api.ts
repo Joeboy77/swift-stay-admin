@@ -370,6 +370,15 @@ class ApiService {
       body: JSON.stringify(data)
     });
   }
+
+  async getPropertyEarningsReport(period: 'daily' | 'weekly' | 'monthly' | 'yearly', propertyId?: string) {
+    const params = new URLSearchParams();
+    params.append('period', period);
+    if (propertyId) {
+      params.append('propertyId', propertyId);
+    }
+    return this.request(`/admin/reports/property-earnings?${params.toString()}`, { method: 'GET' });
+  }
 }
 
 export const apiService = new ApiService();
